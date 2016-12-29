@@ -1,6 +1,5 @@
 package example;
 
-
 import java.util.Scanner;
 
 import javax.jms.Connection;
@@ -13,7 +12,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.command.ActiveMQQueue; 
+import org.apache.activemq.command.ActiveMQQueue;
 
 public class _01MessageSendAndReceive {
 
@@ -26,17 +25,25 @@ public class _01MessageSendAndReceive {
 		Scanner sc = new Scanner(System.in);
 		MessageProducer producer = session.createProducer(queue);
 		MessageConsumer comsumer = session.createConsumer(queue);
-		while(true){
-			
-			if(sc.hasNext()){
-				Message message = session.createTextMessage(sc.nextLine());
-				producer.send(message);
-				System.out.println("Send Message Completed!");
+		while (true) {
+
+			if (sc.hasNext()) {
+				String input;
+				if (!(input = sc.nextLine()).equalsIgnoreCase("stop")) {
+					Message message = session.createTextMessage(input);
+					producer.send(message);
+					System.out.println("Send Message Completed!");
+				} else {
+					break;
+				}
 			}
 			Message recvMessage = comsumer.receive();
-			System.out.println("Message Recieved: "+((TextMessage) recvMessage).getText());
+			System.out.println("Message Recieved: " + ((TextMessage) recvMessage).getText());
 			recvMessage.clearBody();
 		}
+		sc.close();
+		connection.close();
+		
 	}
 
 }

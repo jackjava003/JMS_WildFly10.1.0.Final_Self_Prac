@@ -55,6 +55,7 @@ public class _02QueueTest {
 		for (int i = 0; i < 10; i++) {
 			producer.send(session.createTextMessage("Message:" + i));
 		}
+		connection.close();
 	}
 
 }
