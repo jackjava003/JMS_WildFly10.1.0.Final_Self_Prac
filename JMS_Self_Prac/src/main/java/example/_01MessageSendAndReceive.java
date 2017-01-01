@@ -24,7 +24,7 @@ public class _01MessageSendAndReceive {
 		final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Scanner sc = new Scanner(System.in);
 		MessageProducer producer = session.createProducer(queue);
-		MessageConsumer comsumer = session.createConsumer(queue);
+		MessageConsumer consumer = session.createConsumer(queue);
 		while (true) {
 
 			if (sc.hasNext()) {
@@ -37,7 +37,7 @@ public class _01MessageSendAndReceive {
 					break;
 				}
 			}
-			Message recvMessage = comsumer.receive();
+			Message recvMessage = consumer.receive();
 			System.out.println("Message Recieved: " + ((TextMessage) recvMessage).getText());
 			recvMessage.clearBody();
 		}

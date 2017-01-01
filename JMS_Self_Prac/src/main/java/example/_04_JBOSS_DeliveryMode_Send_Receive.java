@@ -4,6 +4,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSConsumer;
 import javax.jms.JMSContext;
@@ -16,14 +17,14 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class _02_JBOSS_QuenueTest {
+public class _04_JBOSS_DeliveryMode_Send_Receive {
 
 	private static final String CONNECTION_FACTORY = "jms/RemoteConnectionFactory";
 	private static final String QUEUE_DESTINATION = "jms/queue/testqueue";
 	private static final String INITIAL_CONTEXT_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
 	private static final String PROVIDER_URL = "http-remoting://127.0.0.1:8080";
 
-	public static void main(String[] args) throws NamingException, JMSException {
+	public static void main(String[] args) throws NamingException, InterruptedException {
 		Context namingContext = null;
 		JMSContext context = null;
 		final Properties env = new Properties();
@@ -36,39 +37,49 @@ public class _02_JBOSS_QuenueTest {
 			ConnectionFactory connectionFactory = (ConnectionFactory) namingContext.lookup(CONNECTION_FACTORY);
 			Destination destination = (Destination) namingContext.lookup(QUEUE_DESTINATION);
 			context = connectionFactory.createContext("guest", "guest");
-			JMSConsumer consumer1 = context.createConsumer(destination);
-			consumer1.setMessageListener(new MessageListener() {
-				public void onMessage(Message m) {
-					try {
-						System.out.println("Consumer1 get " + ((TextMessage) m).getText());
-					} catch (JMSException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			JMSConsumer consumer2 = context.createConsumer(destination);
-			consumer2.setMessageListener(new MessageListener() {
-				public void onMessage(Message m) {
-					try {
-						System.out.println("Consumer2 get " + ((TextMessage) m).getText());
-					} catch (JMSException e) {
-						e.printStackTrace();
-					}
-				}
-			});
+
 			JMSProducer producer = context.createProducer();
 			Scanner sc = new Scanner(System.in);
 			while (true) {
 				if (sc.hasNext()) {
 					String input;
-					if (!(input = sc.nextLine()).equalsIgnoreCase("stop")) {
-						producer.send(destination, input);
-						System.out.println("Send Message Completed!");
-					} else {
-						break;
+					input = sc.nextLine();
+					producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+					producer.send(destination, "A persistent Message " + input);
+					producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+					producer.send(destination, "A non persistent Message " + input);
+					System.out.println("Send Message Completed!");
+					// producer disconnect
+					if (namingContext != null) {
+						namingContext.close();
+					}
+					if (context != null) {
+						context.close();
+					}
+					System.out.println("producer disconnect");
+					break;
+				}
+
+			}
+			Thread th = Thread.currentThread();
+			th.sleep(1000L);
+			System.out.println("Thread wake");
+			// consumer connect to server
+			namingContext = new InitialContext(env);
+			connectionFactory = (ConnectionFactory) namingContext.lookup(CONNECTION_FACTORY);
+			destination = (Destination) namingContext.lookup(QUEUE_DESTINATION);
+			context = connectionFactory.createContext("guest", "guest");
+
+			JMSConsumer consumer = context.createConsumer(destination);
+			consumer.setMessageListener(new MessageListener() {
+				public void onMessage(Message m) {
+					try {
+						System.out.println("Consumer get " + ((TextMessage) m).getText());
+					} catch (JMSException e) {
+						e.printStackTrace();
 					}
 				}
-			}
+			});
 		} finally {
 			if (namingContext != null) {
 				namingContext.close();

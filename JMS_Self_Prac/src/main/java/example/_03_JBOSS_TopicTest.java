@@ -36,8 +36,8 @@ public class _03_JBOSS_TopicTest {
 			ConnectionFactory connectionFactory = (ConnectionFactory) namingContext.lookup(CONNECTION_FACTORY);
 			Destination destination = (Destination) namingContext.lookup(TOPIC_DESTINATION);
 			context = connectionFactory.createContext("guest", "guest");
-			JMSConsumer comsumer1 = context.createConsumer(destination);
-			comsumer1.setMessageListener(new MessageListener() {
+			JMSConsumer consumer1 = context.createConsumer(destination);
+			consumer1.setMessageListener(new MessageListener() {
 				public void onMessage(Message m) {
 					try {
 						System.out.println("Consumer1 get " + ((TextMessage) m).getText());
@@ -46,8 +46,8 @@ public class _03_JBOSS_TopicTest {
 					}
 				}
 			});
-			JMSConsumer comsumer2 = context.createConsumer(destination);
-			comsumer2.setMessageListener(new MessageListener() {
+			JMSConsumer consumer2 = context.createConsumer(destination);
+			consumer2.setMessageListener(new MessageListener() {
 				public void onMessage(Message m) {
 					try {
 						System.out.println("Consumer2 get " + ((TextMessage) m).getText());

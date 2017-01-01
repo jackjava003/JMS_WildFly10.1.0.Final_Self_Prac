@@ -19,8 +19,8 @@ public class _05DeliveryModeReceiveTest {
 		connection.start();
 		Queue queue = new ActiveMQQueue("testQueue");
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		MessageConsumer comsumer = session.createConsumer(queue);
-		comsumer.setMessageListener(new MessageListener() {
+		MessageConsumer consumer = session.createConsumer(queue);
+		consumer.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
 				try {
 					System.out.println("Consumer get " + ((TextMessage) m).getText());

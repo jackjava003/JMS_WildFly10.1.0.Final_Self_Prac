@@ -26,9 +26,9 @@ public class _02QueueTest {
 		// create a Session
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-		// comsumer1 
-		MessageConsumer comsumer1 = session.createConsumer(queue);
-		comsumer1.setMessageListener(new MessageListener() {
+		// consumer1 
+		MessageConsumer consumer1 = session.createConsumer(queue);
+		consumer1.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
 				try {
 					System.out.println("Consumer1 get " + ((TextMessage) m).getText());
@@ -38,9 +38,9 @@ public class _02QueueTest {
 			}
 		});
 
-		// comsumer2 
-		MessageConsumer comsumer2 = session.createConsumer(queue);
-		comsumer2.setMessageListener(new MessageListener() {
+		// consumer2 
+		MessageConsumer consumer2 = session.createConsumer(queue);
+		consumer2.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
 				try {
 					System.out.println("Consumer2 get " + ((TextMessage) m).getText());

@@ -37,7 +37,7 @@ public class _01_JBOSS_MessageSendAndReceive {
 			Destination destination = (Destination) namingContext.lookup(QUEUE_DESTINATION);
 			context = connectionFactory.createContext("guest", "guest");
 			JMSProducer producer = context.createProducer();
-			JMSConsumer comsumer = context.createConsumer(destination);
+			JMSConsumer consumer= context.createConsumer(destination);
 			Scanner sc = new Scanner(System.in);
 			while (true) {
 				if (sc.hasNext()) {
@@ -49,7 +49,7 @@ public class _01_JBOSS_MessageSendAndReceive {
 						break;
 					}
 				}
-				Message recvMessage = comsumer.receiveNoWait();
+				Message recvMessage = consumer.receiveNoWait();
 				System.out.println("Message Recieved: " + ((TextMessage) recvMessage).getText());
 				recvMessage.clearBody();
 			}
