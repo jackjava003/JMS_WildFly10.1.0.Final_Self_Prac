@@ -1,4 +1,4 @@
-package example;
+﻿package example;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
@@ -21,12 +21,12 @@ public class _02QueueTest {
 		Connection connection = factory.createConnection();
 		connection.start();
 
-		// 创建一个Queue
+		// create a Queue
 		Queue queue = new ActiveMQQueue("testQueue");
-		// 创建一个Session
+		// create a Session
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-		// 注册消费者1
+		// comsumer1 
 		MessageConsumer comsumer1 = session.createConsumer(queue);
 		comsumer1.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
@@ -38,7 +38,7 @@ public class _02QueueTest {
 			}
 		});
 
-		// 注册消费者2
+		// comsumer2 
 		MessageConsumer comsumer2 = session.createConsumer(queue);
 		comsumer2.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
@@ -50,7 +50,7 @@ public class _02QueueTest {
 			}
 		});
 
-		// 创建一个生产者，然后发送多个消息。
+		// create producer and send message
 		MessageProducer producer = session.createProducer(queue);
 		for (int i = 0; i < 10; i++) {
 			producer.send(session.createTextMessage("Message:" + i));

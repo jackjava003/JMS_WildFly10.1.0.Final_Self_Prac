@@ -1,4 +1,4 @@
-package example;
+﻿package example;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
@@ -19,10 +19,10 @@ public class _03TopicTest {
 		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("vm://localhost");
 		Connection connection = factory.createConnection();
 		connection.start();
-		// 创建一个Topic
+		// Create a Topic
 		Topic topic = new ActiveMQTopic("testTopic");
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		// 注册消费者1
+		// comsumer1 
 		MessageConsumer comsumer1 = session.createConsumer(topic);
 		comsumer1.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
@@ -33,7 +33,7 @@ public class _03TopicTest {
 				}
 			}
 		});
-		// 注册消费者2
+		// comsumer2 
 		MessageConsumer comsumer2 = session.createConsumer(topic);
 		comsumer2.setMessageListener(new MessageListener() {
 			public void onMessage(Message m) {
@@ -44,7 +44,7 @@ public class _03TopicTest {
 				}
 			}
 		});
-		// 创建一个生产者，然后发送多个消息。
+		// create producer and send message
 		MessageProducer producer = session.createProducer(topic);
 		for (int i = 0; i < 10; i++) {
 			producer.send(session.createTextMessage("Message:" + i));
