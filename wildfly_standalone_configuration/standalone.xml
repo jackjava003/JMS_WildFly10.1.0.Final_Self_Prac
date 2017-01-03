@@ -111,9 +111,8 @@
                     <param name="direct-deliver" value="false"/>
                 </http-acceptor>
                 <in-vm-acceptor name="in-vm" server-id="0"/>
-                <jms-queue name="ExpiryQueue" entries="java:/jms/queue/ExpiryQueue"/>
-                <jms-queue name="DLQ" entries="java:/jms/queue/DLQ"/>
                 <jms-queue name="testQueue" entries="jms/queue/testqueue java:jboss/exported/jms/queue/testqueue"/>
+                <jms-queue name="testReplyqueue" entries="jms/queue/testReplyqueue java:jboss/exported/jms/queue/testReplyqueue"/>
                 <jms-topic name="testTopic" entries="jms/topic/testtopic java:jboss/exported/jms/topic/testtopic"/>
                 <connection-factory name="InVmConnectionFactory" entries="java:/ConnectionFactory" connectors="in-vm"/>
                 <connection-factory name="RemoteConnectionFactory" entries="java:jboss/exported/jms/RemoteConnectionFactory" connectors="http-connector"/>
