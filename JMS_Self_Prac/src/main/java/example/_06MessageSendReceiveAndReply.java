@@ -55,6 +55,8 @@ public class _06MessageSendReceiveAndReply {
 				}
 			}
 		});
+		
+		connection.close();
 	}
 
 }
